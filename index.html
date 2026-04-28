@@ -77,7 +77,12 @@
                 
                 for (let i = 0; i < fileList.length; i++) {
                     const fileName = fileList[i];
-                    fetch(`assets/FIELD_BIN/${fileName}`).then(res => res.arrayBuffer()).then(buffer => {
+                    fetch(`assets/FIELD_GZ/${fileName}`).then(res => {
+                        // 使用浏览器原生解压缩接口
+                        const ds = new DecompressionStream('gzip');
+                        const decompressedStream = res.body.pipeThrough(ds);
+                        return new Response(decompressedStream).arrayBuffer();
+                    }).then(buffer => {
                         const depthArray = new Float32Array(buffer);
                         
                         fieldDataArrays[i] = depthArray;
