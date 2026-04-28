@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>3D 水动力地形渲染展示 - 自动部署版</title>
+    <title>水动力学模拟结果展示</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #111; color: white; font-family: sans-serif; }
         #canvas-container { width: 100vw; height: 100vh; }
@@ -17,7 +17,7 @@
 </head>
 <body>
     <div id="ui-panel">
-        <h3 style="margin-top:0">水文动力学 3D 展示</h3>
+        <h3 style="margin-top:0">水动力学模拟结果展示</h3>
         <div id="loading" style="display:block;">正在请求服务器数据，这可能需要一些时间... (0%)</div>
         
         <div id="playbackControls" style="display:none; margin-top: 10px; margin-bottom: 15px;">
@@ -27,13 +27,14 @@
         </div>
         
         <div class="file-group">
-            <label>Z轴地形缩放: <span id="zScaleVal">3.0</span></label><br>
-            <input type="range" id="zScale" min="0.1" max="20" step="0.1" value="3.0" style="width: 100%;" />
+            <label>Z轴地形缩放: <span id="zScaleVal">6.0</span></label><br>
+            <input type="range" id="zScale" min="0.1" max="20" step="0.1" value="6.0" style="width: 100%;" />
         </div>
         <div class="file-group">
             <input type="checkbox" id="showWireframe" />
             <label for="showWireframe" style="color: #aaa; font-size: 0.9em;">显示线框</label>
         </div>
+        <div id="cameraInfo" style="font-size: 0.8em; color: #88ff88; margin-top: 10px; line-height: 1.4;"></div>
         <div id="info"></div>
     </div>
     <div id="canvas-container"></div>
@@ -144,6 +145,15 @@
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
+
+            // 实时更新相机参数显示
+            const camInfo = document.getElementById('cameraInfo');
+            if (camInfo && camera && controls) {
+                camInfo.innerHTML = `<b>【相机参数】</b><br>` +
+                    `位置: (${camera.position.x.toFixed(1)}, ${camera.position.y.toFixed(1)}, ${camera.position.z.toFixed(1)})<br>` +
+                    `目标: (${controls.target.x.toFixed(1)}, ${controls.target.y.toFixed(1)}, ${controls.target.z.toFixed(1)})`;
+            }
+
             renderer.render(scene, camera);
         }
 
@@ -391,8 +401,9 @@
                 wireframeMesh.visible = document.getElementById('showWireframe').checked;
                 scene.add(wireframeMesh);
                 
-                camera.position.set(0, -size * 0.5, size * 0.8);
-                controls.target.set(0, 0, 0);
+                // 调整相机位置，基于规模放大系数，让整个模型完整囊括在视野内
+                camera.position.set(-468.6, -11134.4, 18093.6);
+                controls.target.set(-341.1, -645.1, -379.1);
                 controls.update();
 
                 document.getElementById('info').innerHTML = `
