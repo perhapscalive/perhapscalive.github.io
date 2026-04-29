@@ -9,7 +9,7 @@
         #ui-panel { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.95); padding: 20px; border-radius: 4px; border: 1px solid #ccc; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10;}
         h3 { border-bottom: 2px solid #333; padding-bottom: 5px; margin-top: 0; }
         .file-group { margin-bottom: 12px; font-size: 0.95em; }
-        #loading { display: none; color: #d9534f; margin-top: 10px; font-weight: bold; }
+        #loading { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255, 255, 255, 0.95); padding: 25px 50px; border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 1px solid #ccc; z-index: 100; display: none; color: #333; font-size: 1.2em; font-weight: bold; text-align: center; }
         button { margin-top: 10px; padding: 6px 15px; background: #ffffff; color: #333; border: 1px solid #999; border-radius: 3px; cursor: pointer; font-weight: 500; font-family: inherit; }
         button:hover { background: #f0f0f0; }
     </style>
@@ -17,9 +17,14 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
+    <!-- 数据加载居中蒙层指示器 -->
+    <div id="loading" style="display:block;">
+        <span style="display: block; font-size: 1.4em; margin-bottom: 10px; color: #005a9e;">Data Loading ...</span>
+        <span id="loading-text">正在请求服务器数据，这可能需要一些时间... (0%)</span>
+    </div>
+
     <div id="ui-panel">
         <h3 style="margin-top:0">水动力学模拟结果展示</h3>
-        <div id="loading" style="display:block;">正在请求服务器数据，这可能需要一些时间... (0%)</div>
         
         <div class="file-group">
             <label>Z轴地形缩放: <span id="zScaleVal">6.0</span></label><br>
