@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>水动力学模拟结果展示</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #ffffff; color: #333333; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+        #canvas-container { width: 100vw; height: 100vh; }
+        #ui-panel { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.95); padding: 20px; border-radius: 4px; border: 1px solid #ccc; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10;}
+        h3 { border-bottom: 2px solid #333; padding-bottom: 5px; margin-top: 0; }
+        .file-group { margin-bottom: 12px; font-size: 0.95em; }
+        #loading { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255, 255, 255, 0.95); padding: 25px 50px; border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 1px solid #ccc; z-index: 100; display: none; color: #333; font-size: 1.2em; font-weight: bold; text-align: center; }
+        button { margin-top: 10px; padding: 6px 15px; background: #ffffff; color: #333; border: 1px solid #999; border-radius: 3px; cursor: pointer; font-weight: 500; font-family: inherit; }
+        button:hover { background: #f0f0f0; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <!-- 数据加载居中蒙层指示器 -->
+    <div id="loading" style="display:block;">
+        <span style="display: block; font-size: 1.4em; margin-bottom: 10px; color: #005a9e;">Data Loading ...</span>
+        <span id="loading-text">正在请求服务器数据，这可能需要一些时间... (0%)</span>
+    </div>
+
+    <div id="ui-panel">
+        <h3 style="margin-top:0">水动力学模拟结果展示</h3>
+        
+        <div class="file-group">
+            <label>Z轴地形缩放: <span id="zScaleVal">6.0</span></label><br>
+            <input type="range" id="zScale" min="0.1" max="20" step="0.1" value="6.0" style="width: 100%;" />
+        </div>
+        <div class="file-group">
+            <input type="checkbox" id="showWireframe" />
+            <label for="showWireframe" style="color: #555; font-size: 0.9em;">显示地形网格</label>
+        </div>
+        <div class="file-group">
+            <input type="checkbox" id="showCameraInfo" />
+            <label for="showCameraInfo" style="color: #555; font-size: 0.9em;">显示相机参数</label>
+        </div>
+        <div id="cameraInfo" style="display: none; font-size: 0.8em; color: #666; margin-top: 10px; line-height: 1.4; border-top: 1px solid #eee; padding-top: 8px;"></div>
+        <div id="info" style="font-size: 0.9em; margin-top: 10px;"></div>
+    </div>
+
+    <!-- 底部居中更显眼的播放面板 -->
+    <div id="playbackControls" style="display:none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.95); padding: 15px 30px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border: 1px solid #ccc; z-index: 20; align-items: center; gap: 20px; min-width: 400px;">
+        <button id="playPauseBtn" style="margin: 0; padding: 6px 20px; border-radius: 3px; background: #ffffff; color: #585858; border: 1px solid #999; font-weight: 500; width: 90px; cursor: pointer; text-align: center; display: inline-block; font-family: inherit;">▶ 播放</button>
+        <input type="range" id="timeSlider" min="0" max="0" value="0" style="flex: 1; cursor: pointer; accent-color: #5c5c5c;" />
+        <span id="timeLabel" style="font-size: 0.95em; color:#555; min-width: 80px; text-align: right; font-variant-numeric: tabular-nums;">0/0</span>
+    </div>
+
+    <!-- 右下角水印版权重 -->
+    <div style="position: absolute; bottom: 15px; right: 20px; font-size: 0.85em; color: #999; z-index: 10; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-style: italic;">
+        Developed by CPH
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <script>
+        let scene, camera, renderer, controls, terrainMesh, wireframeMesh, waterMesh;
+        let meshDataStr = null;
+        let bottomDataStr = null;
+
+        // 水体时间序列数据和控制状态
+        let fieldDataArrays = []; 
+        let fileNames = [];
+        let currentFrame = 0;
+        let isPlaying = false;
+        let playTimer = null;
+        let globalMeshParams = {}; 
+
+        // 核心改造点：网页加载后立刻自动请求数据
+        window.addEventListener('DOMContentLoaded', async () => {
+            init(); // 初始化 Three.js 场景
+
+            try {
+                // 1. 拉取地形和网格的静态文本
+                document.getElementById('loading-text').innerText = "1/3 加载地形网格文件...";
+                meshDataStr = await (await fetch('assets/01_mesh')).text();
+                
+                document.getElementById('loading-text').innerText = "2/3 加载高程数据文件...";
+                bottomDataStr = await (await fetch('assets/02_bottom.csv')).text();
+                
+                // 初步渲染地形
+                processAndRender();
+
+                // 2. 拉取动画帧列表
+                document.getElementById('loading-text').innerText = "3/3 加载时间序列清单...";
+                const fileList = await (await fetch('dataList.json')).json();
+                
+                // 3. 并发或依序批量拉取 FIELD 数组数据
+                fieldDataArrays = [];
+                fileNames = [];
+                let loadedCount = 0;
+                
+                for (let i = 0; i < fileList.length; i++) {
+                    const fileName = fileList[i];
+                    fetch(`assets/FIELD_GZ/${fileName}`).then(res => {
+                        // 使用浏览器原生解压缩接口
+                        const ds = new DecompressionStream('gzip');
+                        const decompressedStream = res.body.pipeThrough(ds);
+                        return new Response(decompressedStream).arrayBuffer();
+                    }).then(buffer => {
+                        const depthArray = new Float32Array(buffer);
+                        
+                        fieldDataArrays[i] = depthArray;
+                        fileNames[i] = fileName;
+                        loadedCount++;
+                        
+                        // 更新进度
+                        document.getElementById('loading-text').innerText = `加载流场数据中... (${loadedCount}/${fileList.length})`;
+                        
+                        // 全部获取完成
+                        if (loadedCount === fileList.length) {
+                            document.getElementById('loading').style.display = 'none';
+                            
+                            // 开启播放器配置
+                            document.getElementById('playbackControls').style.display = 'flex';
+                            document.getElementById('timeSlider').max = fileList.length - 1;
+                            document.getElementById('timeSlider').value = 0;
+                            
+                            // 初始化第一帧并自动模拟点击开始播放
+                            renderWaterFrame(0);
+                            const playBtn = document.getElementById('playPauseBtn');
+                            if (!isPlaying) playBtn.click();
+                        }
+                    });
+                }
+            } catch (err) {
+                document.getElementById('loading-text').innerText = "请求数据失败: " + err.message;
+            }
+        });
+
+        // 初始化 Three.js
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff); // 纯白背景
+            
+            // 添加环境光和平行光以显示模型立体感
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(1, 1, 1).normalize();
+            scene.add(dirLight);
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000000);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+
+            window.addEventListener('resize', onWindowResize, false);
+            animate();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            // 实时更新相机参数显示
+            const camInfo = document.getElementById('cameraInfo');
+            if (camInfo && camera && controls) {
+                camInfo.innerHTML = `<b>【相机参数】</b><br>` +
+                    `位置: (${camera.position.x.toFixed(1)}, ${camera.position.y.toFixed(1)}, ${camera.position.z.toFixed(1)})<br>` +
+                    `目标: (${controls.target.x.toFixed(1)}, ${controls.target.y.toFixed(1)}, ${controls.target.z.toFixed(1)})`;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // 播放控制
+        document.getElementById('playPauseBtn').addEventListener('click', () => {
+            if (fieldDataArrays.length === 0) return;
+            isPlaying = !isPlaying;
+            document.getElementById('playPauseBtn').innerText = isPlaying ? "⏸ 暂停" : "▶ 播放";
+            if (isPlaying) {
+                playTimer = setInterval(() => {
+                    currentFrame++;
+                    if (currentFrame >= fieldDataArrays.length) currentFrame = 0;
+                    document.getElementById('timeSlider').value = currentFrame;
+                    renderWaterFrame(currentFrame);
+                }, 100); // 10帧每秒
+            } else {
+                clearInterval(playTimer);
+            }
+        });
+
+        document.getElementById('timeSlider').addEventListener('input', e => {
+            currentFrame = parseInt(e.target.value);
+            renderWaterFrame(currentFrame);
+        });
+
+        document.getElementById('zScale').addEventListener('input', e => {
+            const val = parseFloat(e.target.value);
+            document.getElementById('zScaleVal').innerText = val.toFixed(1);
+            if (terrainMesh) {
+                terrainMesh.scale.z = val;
+                if (wireframeMesh) {
+                    wireframeMesh.scale.z = val;
+                    wireframeMesh.position.z = terrainMesh.position.z + 0.05 * val;
+                }
+            }
+            if (waterMesh) {
+                waterMesh.scale.z = val;
+                waterMesh.position.z = terrainMesh.position.z + 0.05 * val;
+            }
+        });
+
+        document.getElementById('showWireframe').addEventListener('change', e => {
+            if (wireframeMesh) {
+                wireframeMesh.visible = e.target.checked;
+            }
+        });
+
+        document.getElementById('showCameraInfo').addEventListener('change', e => {
+            const camInfo = document.getElementById('cameraInfo');
+            if (camInfo) {
+                camInfo.style.display = e.target.checked ? 'block' : 'none';
+            }
+        });
+
+        // 核心水动画逻辑
+        function renderWaterFrame(index) {
+            if (!globalMeshParams || !fieldDataArrays[index]) return;
+            document.getElementById('timeLabel').innerText = `${index} / ${fieldDataArrays.length - 1} (${fileNames[index]})`;
+
+            const { nelem, npoin, indices, elemStart, cellZArray, nodeZCount, positions } = globalMeshParams;
+            const waterDepthArray = fieldDataArrays[index];
+            const waterIndices = [];
+            
+            const nodeWaterZSum = new Float32Array(npoin);
+            for (let i = 0; i < nelem; i++) {
+                const depth = waterDepthArray[i] || 0;
+                if (depth > 0.001) {
+                    const n1 = indices[i * 3];
+                    if (n1 === -1) continue;
+                    const n2 = indices[i * 3 + 1];
+                    const n3 = indices[i * 3 + 2];
+                    waterIndices.push(n1, n2, n3);
+
+                    nodeWaterZSum[n1] += depth;
+                    nodeWaterZSum[n2] += depth;
+                    nodeWaterZSum[n3] += depth;
+                }
+            }
+
+            const waterPositions = new Float32Array(npoin * 3);
+            const waterColors = new Float32Array(npoin * 3);
+            for (let i = 0; i < npoin; i++) {
+                const baseZ = positions[i * 3 + 2];
+                const avgDepth = nodeZCount[i] > 0 ? (nodeWaterZSum[i] / nodeZCount[i]) : 0;
+                
+                waterPositions[i * 3]     = positions[i * 3];
+                waterPositions[i * 3 + 1] = positions[i * 3 + 1];
+                waterPositions[i * 3 + 2] = baseZ + avgDepth;
+
+                // 学术风格水深映射 (WRR、GRL常用：浅水青白 -> 深水深蓝)
+                if (avgDepth > 0) {
+                    let r = 0, g = 0, b = 0;
+                    const maxDepthScale = 5.0; // 映射参照最大深度
+                    let t = Math.min(avgDepth / maxDepthScale, 1.0);
+                    
+                    if (t <= 0.5) {
+                        // 0 - 0.5: 白色 (1,1,1) 过渡到 浅青色 (0.2, 0.8, 1.0)
+                        const t2 = t * 2.0;
+                        r = 1.0 * (1 - t2) + 0.2 * t2;
+                        g = 1.0 * (1 - t2) + 0.8 * t2;
+                        b = 1.0 * (1 - t2) + 1.0 * t2;
+                    } else {
+                        // 0.5 - 1.0: 浅青色 (0.2, 0.8, 1.0) 过渡到 深海蓝 (0.0, 0.2, 0.6)
+                        const t2 = (t - 0.5) * 2.0;
+                        r = 0.2 * (1 - t2) + 0.0 * t2;
+                        g = 0.8 * (1 - t2) + 0.2 * t2;
+                        b = 1.0 * (1 - t2) + 0.6 * t2;
+                    }
+
+                    waterColors[i * 3]     = r;
+                    waterColors[i * 3 + 1] = g;
+                    waterColors[i * 3 + 2] = b;
+                }
+            }
+
+            if (waterMesh) {
+                scene.remove(waterMesh);
+                waterMesh.geometry.dispose();
+                waterMesh.material.dispose();
+                waterMesh = null;
+            }
+
+            if (waterIndices.length > 0) {
+                const waterGeometry = new THREE.BufferGeometry();
+                waterGeometry.setAttribute('position', new THREE.BufferAttribute(waterPositions, 3));
+                waterGeometry.setAttribute('color', new THREE.BufferAttribute(waterColors, 3));
+                waterGeometry.setIndex(new THREE.BufferAttribute(new Uint32Array(waterIndices), 1));
+                waterGeometry.computeVertexNormals();
+
+                const waterMaterial = new THREE.MeshStandardMaterial({
+                    vertexColors: true,
+                    roughness: 0.3,
+                    metalness: 0.1,
+                    transparent: true,
+                    opacity: 0.9, // 较学术实体感，略带透明避免遮挡底部地形
+                    side: THREE.DoubleSide
+                });
+
+                waterMesh = new THREE.Mesh(waterGeometry, waterMaterial);
+                const terrainX = terrainMesh ? terrainMesh.position.x : 0;
+                const terrainY = terrainMesh ? terrainMesh.position.y : 0;
+                waterMesh.position.set(terrainX, terrainY, 0);
+
+                const zScale = parseFloat(document.getElementById('zScale').value);
+                waterMesh.scale.z = zScale;
+                waterMesh.position.z += 0.05 * zScale; 
+
+                scene.add(waterMesh);
+            }
+        }
+
+        // 处理地形和基本静态参数
+        function processAndRender() {
+            try {
+                const cellZArray = bottomDataStr.split('\n')
+                                    .map(line => line.trim())
+                                    .filter(line => line.length > 0)
+                                    .map(line => parseFloat(line));
+
+                const lines = meshDataStr.split('\n');
+                let nelem = 0, npoin = 0;
+                let elemStart = -1, poinStart = -1;
+
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line.startsWith('NELEM=')) { nelem = parseInt(line.split('=')[1]); elemStart = i + 1; }
+                    else if (line.startsWith('NPOIN=')) { npoin = parseInt(line.split('=')[1]); poinStart = i + 1; }
+                }
+
+                if (cellZArray.length !== nelem) {
+                    console.warn(`高程个数(${cellZArray.length})与单元数(${nelem})不完全匹配，空行导致以较小值为准。`);
+                }
+
+                const indices = new Int32Array(nelem * 3).fill(-1);
+                const validIndices = [];
+                const nodeZSum = new Float32Array(npoin);
+                const nodeZCount = new Uint32Array(npoin);
+
+                for (let i = 0; i < nelem; i++) {
+                    const parts = lines[elemStart + i].trim().split(/\s+/);
+                    if (parseInt(parts[0]) === 5) {
+                        const n1 = parseInt(parts[1]);
+                        const n2 = parseInt(parts[2]);
+                        const n3 = parseInt(parts[3]);
+                        
+                        indices[i * 3]     = n1;
+                        indices[i * 3 + 1] = n2;
+                        indices[i * 3 + 2] = n3;
+                        validIndices.push(n1, n2, n3);
+                        
+                        const elementZ = cellZArray[i] || 0;
+                        nodeZSum[n1] += elementZ; nodeZCount[n1]++;
+                        nodeZSum[n2] += elementZ; nodeZCount[n2]++;
+                        nodeZSum[n3] += elementZ; nodeZCount[n3]++;
+                    }
+                }
+
+                const positions = new Float32Array(npoin * 3);
+                let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, maxZ = -Infinity, minZ = Infinity;
+
+                for (let i = 0; i < npoin; i++) {
+                    const parts = lines[poinStart + i].trim().split(/\s+/);
+                    const x = parseFloat(parts[0]);
+                    const y = parseFloat(parts[1]);
+                    const z = nodeZCount[i] > 0 ? (nodeZSum[i] / nodeZCount[i]) : 0; 
+                    
+                    positions[i * 3]     = x;
+                    positions[i * 3 + 1] = y;
+                    positions[i * 3 + 2] = z;
+
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (y < minY) minY = y;
+                    if (y > maxY) maxY = y;
+                    if (z > maxZ) maxZ = z;
+                    if (z < minZ) minZ = z;
+                }
+
+                const center = new THREE.Vector3((minX + maxX)/2, (minY + maxY)/2, 0);
+                const size = Math.max(maxX - minX, maxY - minY);
+
+                globalMeshParams = { nelem, npoin, lines, elemStart, poinStart, cellZArray, nodeZCount, nodeZSum, positions, minZ, indices };
+
+                if (terrainMesh) {
+                    scene.remove(terrainMesh); scene.remove(wireframeMesh);
+                    terrainMesh.geometry.dispose(); terrainMesh.material.dispose();
+                }
+
+                const geometry = new THREE.BufferGeometry();
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setIndex(new THREE.BufferAttribute(new Uint32Array(validIndices), 1));
+                geometry.computeVertexNormals();
+
+                const material = new THREE.MeshStandardMaterial({ 
+                    color: 0xf2f2f2, // 学术论文常用灰白地形底色
+                    roughness: 0.9,
+                    metalness: 0.0,
+                    side: THREE.DoubleSide
+                });
+                terrainMesh = new THREE.Mesh(geometry, material);
+                terrainMesh.position.set(-center.x, -center.y, 0);
+                scene.add(terrainMesh);
+
+                const edgeGeo = new THREE.WireframeGeometry(geometry);
+                const wireframeMat = new THREE.LineBasicMaterial({ color: 0x888888, opacity: 0.3, transparent: true });
+                wireframeMesh = new THREE.LineSegments(edgeGeo, wireframeMat);
+                wireframeMesh.position.copy(terrainMesh.position);
+                
+                const zScale = parseFloat(document.getElementById('zScale').value);
+                terrainMesh.scale.z = zScale;
+                wireframeMesh.scale.z = zScale;
+                wireframeMesh.position.z += 0.05 * zScale; 
+                
+                wireframeMesh.visible = document.getElementById('showWireframe').checked;
+                scene.add(wireframeMesh);
+                
+                // 调整相机位置，基于规模放大系数，让整个模型完整囊括在视野内
+                camera.position.set(-468.6, -11134.4, 18093.6);
+                controls.target.set(-341.1, -645.1, -379.1);
+                controls.update();
+
+                document.getElementById('info').innerHTML = `
+                    <p style="color:#28a745; font-weight: bold; margin-bottom: 5px;">地形加载完成</p>
+                    <p style="margin: 3px 0;">网格节点: ${npoin}</p>
+                    <p>地形单元: ${nelem}</p>
+                    <p>场景范围: ${size.toFixed(2)}m</p>
+                `;
+            } catch (err) {
+                console.error(err);
+                alert("解析出错，请检查控制台：" + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
