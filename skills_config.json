@@ -1,0 +1,22 @@
+{
+  "researchInterests": [
+    { "name": "Hydrodynamics & Flood Modeling, HPC", "score": 100 },
+    { "name": "Precipitation Structure & Extreme Events", "score": 90 },
+    { "name": "Hydrological Modeling, Rainfall-Runoff", "score": 80 },
+    { "name": "Hydrology & Machine Learning", "score": 70 },
+    { "name": "Smart Water / Digital Twins", "score": 70 },
+    { "name": "Earth System Model & Sustainability", "score": 60 },
+    { "name": "Ecological Hydrology & Carbon Cycling", "score": 60 },
+    { "name": "Atmospheric Science & Tropical Cyclones", "score": 60 }
+  ],
+  "technicalSkills": [
+    { "name": "Hydrodynamics Numerical Modeling", "score": 100 },
+    { "name": "Hydrology & GIS Data Processing", "score": 90 },
+    { "name": "Computer Science Fundamentals", "score": 90 },
+    { "name": "Programming (C++, Python)", "score": 90 },
+    { "name": "High-Performance Computing, CUDA", "score": 80 },
+    { "name": "Computer Graphics, Rendering", "score": 60 },
+    { "name": "Machine Learning, Deep Learning", "score": 60 },
+    { "name": "Remote Sensing", "score": 60 }
+  ]
+}

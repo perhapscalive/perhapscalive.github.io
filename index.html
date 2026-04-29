@@ -254,6 +254,44 @@
         
         /* Smooth Scrolling */
         html { scroll-behavior: smooth; }
+
+        /* Skills & Interests Chart */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 35px;
+        }
+        .skills-column {
+            flex: 1;
+            min-width: 300px;
+        }
+        .skills-column h4 {
+            margin-bottom: 20px;
+            color: #111;
+            font-size: 1.1em;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+        .skill-bar {
+            margin-bottom: 15px;
+        }
+        .skill-info {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #444;
+        }
+        .skill-progress {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #005a9e;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
@@ -291,8 +329,54 @@
                 I hold a Master's degree in Hydrology, specializing in the development and application of advanced numerical models. My work bridges fundamental hydrological processes with applied environmental engineering, focusing on hydrodynamic modeling, catchment-scale water balances, and the effects of large-scale climate change on aquatic systems.
             </p>
             <p>
-                Currently, I am deeply interested in leveraging both physics-based models and data-driven approaches to simulate complex environmental flows and extreme hydrological events, with the aim of providing rigorous, rigorous insights into how our water resources respond to a changing environment. 
+                Currently, I am deeply interested in leveraging both physics-based models and data-driven approaches to simulate complex environmental flows and extreme hydrological events, with the aim of providing rigorous insights into how our water resources respond to a changing environment. 
             </p>
+
+            <!-- Skills & Interests Visualization (Dynamically loaded) -->
+            <div class="skills-container" id="skills-container">
+                <!-- Research Interests -->
+                <div class="skills-column" id="research-interests-col">
+                    <h4>Research Interests</h4>
+                    <!-- Populated by JavaScript -->
+                </div>
+
+                <!-- Technical Skills -->
+                <div class="skills-column" id="technical-skills-col">
+                    <h4>Technical Skills</h4>
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <script>
+                // Dynamically fetch and render skills configuration
+                fetch('skills_config.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        const renderSkills = (skills, containerId) => {
+                            const container = document.getElementById(containerId);
+                            // Find max score to normalize width to 100%
+                            const maxScore = Math.max(...skills.map(s => s.score));
+                            
+                            skills.forEach(skill => {
+                                const widthPercent = (skill.score / maxScore) * 100;
+                                
+                                const skillBar = document.createElement('div');
+                                skillBar.className = 'skill-bar';
+                                skillBar.innerHTML = `
+                                    <div class="skill-info">${skill.name}</div>
+                                    <div class="skill-progress">
+                                        <div class="progress-fill" style="width: ${widthPercent}%;"></div>
+                                    </div>
+                                `;
+                                container.appendChild(skillBar);
+                            });
+                        };
+
+                        renderSkills(data.researchInterests, 'research-interests-col');
+                        renderSkills(data.technicalSkills, 'technical-skills-col');
+                    })
+                    .catch(err => console.error('Error loading skills config:', err));
+            </script>
         </section>
 
         <!-- Hydrodynamics Section -->
