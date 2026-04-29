@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <title>水动力学模拟结果展示</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #111; color: white; font-family: sans-serif; }
+        body { margin: 0; overflow: hidden; background-color: #ffffff; color: #333333; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
         #canvas-container { width: 100vw; height: 100vh; }
-        #ui-panel { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; border: 1px solid #444; z-index: 10;}
-        .file-group { margin-bottom: 12px; }
-        #loading { display: none; color: #ffcc00; margin-top: 10px; font-weight: bold; }
-        button { margin-top: 10px; padding: 6px 15px; background: #0078d7; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #005a9e; }
+        #ui-panel { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.95); padding: 20px; border-radius: 4px; border: 1px solid #ccc; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10;}
+        h3 { border-bottom: 2px solid #333; padding-bottom: 5px; margin-top: 0; }
+        .file-group { margin-bottom: 12px; font-size: 0.95em; }
+        #loading { display: none; color: #d9534f; margin-top: 10px; font-weight: bold; }
+        button { margin-top: 10px; padding: 6px 15px; background: #ffffff; color: #333; border: 1px solid #999; border-radius: 3px; cursor: pointer; font-weight: 500; font-family: inherit; }
+        button:hover { background: #f0f0f0; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -32,10 +33,10 @@
         </div>
         <div class="file-group">
             <input type="checkbox" id="showWireframe" />
-            <label for="showWireframe" style="color: #aaa; font-size: 0.9em;">显示线框</label>
+            <label for="showWireframe" style="color: #555; font-size: 0.9em;">显示地形网格</label>
         </div>
-        <div id="cameraInfo" style="font-size: 0.8em; color: #88ff88; margin-top: 10px; line-height: 1.4;"></div>
-        <div id="info"></div>
+        <div id="cameraInfo" style="font-size: 0.8em; color: #666; margin-top: 10px; line-height: 1.4; border-top: 1px solid #eee; padding-top: 8px;"></div>
+        <div id="info" style="font-size: 0.9em; margin-top: 10px;"></div>
     </div>
     <div id="canvas-container"></div>
 
@@ -113,8 +114,10 @@
         // 初始化 Three.js
         function init() {
             scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff); // 纯白背景
+            
             // 添加环境光和平行光以显示模型立体感
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
             
             const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -236,24 +239,26 @@
                 waterPositions[i * 3 + 1] = positions[i * 3 + 1];
                 waterPositions[i * 3 + 2] = baseZ + avgDepth;
 
-                // 颜色映射：应用刚刚改好的深蓝色/蓝宝石海蓝色效果
+                // 学术风格水深映射 (WRR、GRL常用：浅水青白 -> 深水深蓝)
                 if (avgDepth > 0) {
                     let r = 0, g = 0, b = 0;
-                    if (avgDepth <= 1.0) {
-                        const t = avgDepth / 1.0;
-                        r = 0.6 * (1 - t) + 0.1 * t;
-                        g = 0.9 * (1 - t) + 0.5 * t;
-                        b = 1.0 * (1 - t) + 0.9 * t;
-                    } else if (avgDepth <= 5.0) {
-                        const t = (avgDepth - 1.0) / 4.0;
-                        r = 0.1 * (1 - t) + 0.0 * t;
-                        g = 0.5 * (1 - t) + 0.05 * t;
-                        b = 0.9 * (1 - t) + 0.3 * t;
+                    const maxDepthScale = 5.0; // 映射参照最大深度
+                    let t = Math.min(avgDepth / maxDepthScale, 1.0);
+                    
+                    if (t <= 0.5) {
+                        // 0 - 0.5: 白色 (1,1,1) 过渡到 浅青色 (0.2, 0.8, 1.0)
+                        const t2 = t * 2.0;
+                        r = 1.0 * (1 - t2) + 0.2 * t2;
+                        g = 1.0 * (1 - t2) + 0.8 * t2;
+                        b = 1.0 * (1 - t2) + 1.0 * t2;
                     } else {
-                        r = 0.0;
-                        g = 0.05;
-                        b = 0.3;
+                        // 0.5 - 1.0: 浅青色 (0.2, 0.8, 1.0) 过渡到 深海蓝 (0.0, 0.2, 0.6)
+                        const t2 = (t - 0.5) * 2.0;
+                        r = 0.2 * (1 - t2) + 0.0 * t2;
+                        g = 0.8 * (1 - t2) + 0.2 * t2;
+                        b = 1.0 * (1 - t2) + 0.6 * t2;
                     }
+
                     waterColors[i * 3]     = r;
                     waterColors[i * 3 + 1] = g;
                     waterColors[i * 3 + 2] = b;
@@ -276,10 +281,10 @@
 
                 const waterMaterial = new THREE.MeshStandardMaterial({
                     vertexColors: true,
-                    roughness: 0.05,
+                    roughness: 0.3,
                     metalness: 0.1,
                     transparent: true,
-                    opacity: 0.7,
+                    opacity: 0.9, // 较学术实体感，略带透明避免遮挡底部地形
                     side: THREE.DoubleSide
                 });
 
@@ -379,8 +384,8 @@
                 geometry.computeVertexNormals();
 
                 const material = new THREE.MeshStandardMaterial({ 
-                    color: 0x8B7355, 
-                    roughness: 1.0,
+                    color: 0xf2f2f2, // 学术论文常用灰白地形底色
+                    roughness: 0.9,
                     metalness: 0.0,
                     side: THREE.DoubleSide
                 });
@@ -389,7 +394,7 @@
                 scene.add(terrainMesh);
 
                 const edgeGeo = new THREE.WireframeGeometry(geometry);
-                const wireframeMat = new THREE.LineBasicMaterial({ color: 0x000000, opacity: 0.2, transparent: true });
+                const wireframeMat = new THREE.LineBasicMaterial({ color: 0x888888, opacity: 0.3, transparent: true });
                 wireframeMesh = new THREE.LineSegments(edgeGeo, wireframeMat);
                 wireframeMesh.position.copy(terrainMesh.position);
                 
@@ -407,8 +412,8 @@
                 controls.update();
 
                 document.getElementById('info').innerHTML = `
-                    <p style="color:#0f0;">渲染核心地形成功！</p>
-                    <p>节点数目: ${npoin}</p>
+                    <p style="color:#28a745; font-weight: bold; margin-bottom: 5px;">地形加载完成</p>
+                    <p style="margin: 3px 0;">网格节点: ${npoin}</p>
                     <p>地形单元: ${nelem}</p>
                     <p>场景范围: ${size.toFixed(2)}m</p>
                 `;
