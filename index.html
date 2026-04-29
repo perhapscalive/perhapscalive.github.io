@@ -75,17 +75,17 @@
 
             try {
                 // 1. 拉取地形和网格的静态文本
-                document.getElementById('loading').innerText = "1/3 加载地形网格文件...";
+                document.getElementById('loading-text').innerText = "1/3 加载地形网格文件...";
                 meshDataStr = await (await fetch('assets/01_mesh')).text();
                 
-                document.getElementById('loading').innerText = "2/3 加载高程数据文件...";
+                document.getElementById('loading-text').innerText = "2/3 加载高程数据文件...";
                 bottomDataStr = await (await fetch('assets/02_bottom.csv')).text();
                 
                 // 初步渲染地形
                 processAndRender();
 
                 // 2. 拉取动画帧列表
-                document.getElementById('loading').innerText = "3/3 加载时间序列清单...";
+                document.getElementById('loading-text').innerText = "3/3 加载时间序列清单...";
                 const fileList = await (await fetch('dataList.json')).json();
                 
                 // 3. 并发或依序批量拉取 FIELD 数组数据
@@ -108,7 +108,7 @@
                         loadedCount++;
                         
                         // 更新进度
-                        document.getElementById('loading').innerText = `加载流场动画中... (${loadedCount}/${fileList.length})`;
+                        document.getElementById('loading-text').innerText = `加载流场数据中... (${loadedCount}/${fileList.length})`;
                         
                         // 全部获取完成
                         if (loadedCount === fileList.length) {
@@ -127,7 +127,7 @@
                     });
                 }
             } catch (err) {
-                document.getElementById('loading').innerText = "请求数据失败: " + err.message;
+                document.getElementById('loading-text').innerText = "请求数据失败: " + err.message;
             }
         });
 
