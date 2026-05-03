@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Profile | CPH</title>
+    <title>P.CHEN's PAGE</title>
     <style>
         /* Academic, Clean, Top-Tier Journal Style */
         body { 
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
             color: #333333; 
-            line-height: 1.7; 
+            line-height: 1.5; 
             margin: 0; 
             padding: 0; 
             background-color: #fafafa;
+            min-height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
         }
         h1, h2, h3, h4, h5, h6 { 
             font-family: "Georgia", "Times New Roman", serif; 
@@ -33,7 +37,7 @@
             padding: 50px 0; 
             position: fixed; 
             width: 250px; 
-            height: 100vh;
+            min-height: 100vh;
             left: 0;
             top: 0; 
             z-index: 1000; 
@@ -79,11 +83,13 @@
             margin-left: 250px;
             display: flex;
             justify-content: center;
+            width: calc(100% - 250px);
+            min-min-height: 100vh;
         }
         .container { 
             max-width: 1100px; 
             width: 100%;
-            padding: 60px 80px; 
+            padding: 40px 60px; 
             background: #ffffff; 
             box-shadow: 0 0 20px rgba(0,0,0,0.02);
             min-height: 100vh;
@@ -91,7 +97,7 @@
         }
         
         section { 
-            padding: 60px 0; 
+            padding: 80px 0 40px; 
             border-bottom: 1px solid #f0f0f0; 
         }
         section:last-child { 
@@ -100,9 +106,11 @@
         
         /* Section specific styles */
         .hero { 
-            text-align: center; 
-            padding-top: 100px; 
-            padding-bottom: 80px;
+            padding: 0;
+            min-height: 100vh;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
         }
         .hero h1 { 
             font-size: 2.8em; 
@@ -281,16 +289,74 @@
             font-size: 0.9em;
             color: #444;
         }
-        .skill-progress {
-            height: 6px;
+                        .skill-progress {
+            height: 8px;
             background: #e0e0e0;
-            border-radius: 3px;
+            border-radius: 4px;
             overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
         }
         .progress-fill {
             height: 100%;
-            background: #005a9e;
-            border-radius: 3px;
+            background: linear-gradient(270deg, #004578, #0078d4, #00a4ef, #0078d4);
+            background-size: 300% 100%;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            transition: width 1.5s ease-in-out;
+        }
+        .skill-bar {
+            margin-bottom: 15px;
+            cursor: default;
+        }
+        .skill-bar:hover .progress-fill {
+            animation: water-drift 3s ease-in-out infinite;
+        }
+        .skill-bar:hover .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: 0; right: 0; bottom: 0;
+            /* Advanced SVG water wave */
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><path d="M 0,10 C 25,0 25,20 50,10 C 75,0 75,20 100,10 L 100,20 L 0,20 Z" fill="rgba(255, 255, 255, 0.4)"/></svg>') repeat-x;
+            background-size: 30px 150%;
+            animation: wave-ripple 1.5s linear infinite;
+        }
+        @keyframes water-drift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes wave-ripple {
+            from { background-position: 0 0; }
+            to { background-position: -30px 0; }
+        }        /* High Resolution Adapatations (1080p, 1440p, 4K) */
+        @media (min-width: 1900px) {
+            body { font-size: 18px; }
+            .container { max-width: 1300px; padding: 60px 80px; }
+            header { width: 300px; }
+            .main-wrapper { margin-left: 300px; width: calc(100% - 300px); }
+            .sidebar-brand { padding: 0 50px; }
+            nav { padding: 0 50px; gap: 24px; }
+            .sidebar-footer { padding: 0 50px !important; }
+        }
+        @media (min-width: 2500px) {
+            body { font-size: 24px; }
+            .container { max-width: 1800px; padding: 80px 120px; }
+            header { width: 400px; }
+            .main-wrapper { margin-left: 400px; width: calc(100% - 400px); }
+            .sidebar-brand { padding: 0 60px; }
+            nav { padding: 0 60px; gap: 28px; }
+            .sidebar-footer { padding: 0 60px !important; }
+        }
+        @media (min-width: 3800px) {
+            body { font-size: 34px; }
+            .container { max-width: 2800px; padding: 120px 180px; }
+            header { width: 550px; }
+            .main-wrapper { margin-left: 550px; width: calc(100% - 550px); }
+            .sidebar-brand { padding: 0 80px; margin-bottom: 80px; }
+            nav { padding: 0 80px; gap: 40px; }
+            .sidebar-footer { padding: 0 80px !important; margin-bottom: 50px; }
         }
     </style>
 </head>
@@ -299,67 +365,53 @@
     <header>
         <div class="sidebar-brand">
             <h2>P. CHEN</h2>
-            <p>Hydrologist / M.Sc.</p>
+            <p>Guangzhou, CHINA.</p>
         </div>
         <nav>
-            <a href="#home">Home</a>
-            <a href="#about">About Me</a>
+            <a href="#about">ABOUT ME</a>
             <a href="#hydrodynamics">Hydrodynamics</a>
             <a href="#hydrology">Hydrology</a>
             <a href="#publications">Publications</a>
             <a href="#tools">Tools</a>
             <a href="#links">Links</a>
         </nav>
+        <div class="sidebar-footer" style="padding: 0 40px; margin-top: auto; padding-bottom: 30px; font-size: 0.75em; color: #888; text-align: left; line-height: 1.5;">
+            &copy;<br>
+        </div>
     </header>
 
     <div class="main-wrapper">
         <div class="container">
             
             <!-- Home Section -->
-        <section id="home" class="hero">
-            <h1>Good Person</h1>
-            <h2>Hydrologist & Environmental Modeler</h2>
-            <p>Recent M.Sc. graduate passionate about hydrological modeling, hydrodynamic simulations, and understanding large-scale climate change impacts on water resources.</p>
-        </section>
+        <section id="about" class="hero" style="text-align: left; display: flex; flex-direction: column; justify-content: center;">
+            <h1 style="font-size: 2.5em; color: #111; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Penghan CHEN</h1>
+            <h3 style="font-size: 1.2em; color: #555; font-weight: normal; margin-top: 0; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px; display: inline-block;">Prospective Ph.D. Student / Recent M.Sc. Graduate</h3>
+            
+            <p style="font-size: 1.05em; color: #444; max-width: 100%; margin: 0 0 15px 0; line-height: 1.8; ">
+                Welcome to my personal homepage. This site showcases my research interests and professional skills.
 
-        <!-- About Me Section -->
-        <section id="about">
-            <h3 class="section-title">About Me</h3>
-            <p>
-                I hold a Master's degree in Hydrology, specializing in the development and application of advanced numerical models. My work bridges fundamental hydrological processes with applied environmental engineering, focusing on hydrodynamic modeling, catchment-scale water balances, and the effects of large-scale climate change on aquatic systems.
-            </p>
-            <p>
-                Currently, I am deeply interested in leveraging both physics-based models and data-driven approaches to simulate complex environmental flows and extreme hydrological events, with the aim of providing rigorous insights into how our water resources respond to a changing environment. 
-            </p>
+I am a recent M.Sc. graduate passionate about hydrological and hydrodynamic simulations, and understanding large-scale climate change impacts on water resources. Currently, I am actively seeking Ph.D. opportunities to further explore my research interests in these areas.
 
-            <!-- Skills & Interests Visualization (Dynamically loaded) -->
             <div class="skills-container" id="skills-container">
-                <!-- Research Interests -->
                 <div class="skills-column" id="research-interests-col">
                     <h4>Research Interests</h4>
-                    <!-- Populated by JavaScript -->
                 </div>
-
-                <!-- Technical Skills -->
                 <div class="skills-column" id="technical-skills-col">
                     <h4>Technical Skills</h4>
-                    <!-- Populated by JavaScript -->
                 </div>
             </div>
 
             <script>
-                // Dynamically fetch and render skills configuration
                 fetch('skills_config.json')
                     .then(response => response.json())
                     .then(data => {
                         const renderSkills = (skills, containerId) => {
                             const container = document.getElementById(containerId);
-                            // Find max score to normalize width to 100%
                             const maxScore = Math.max(...skills.map(s => s.score));
                             
                             skills.forEach(skill => {
                                 const widthPercent = (skill.score / maxScore) * 100;
-                                
                                 const skillBar = document.createElement('div');
                                 skillBar.className = 'skill-bar';
                                 skillBar.innerHTML = `
@@ -379,7 +431,7 @@
             </script>
         </section>
 
-        <!-- Hydrodynamics Section -->
+<!-- Hydrodynamics Section -->
         <section id="hydrodynamics">
             <h3 class="section-title">Hydrodynamics</h3>
             <p>
@@ -396,7 +448,7 @@
                     <p>
                         The viewer features academic-grade colormaps for depth variation and interactive camera controls, built on top of WebGL and Three.js technologies. This aids in rapid data interpretation for environmental engineering projects.
                     </p>
-                    <a href="hydro_simulation.html" target="_blank" class="demo-btn">â–¶ View Live Interactive Demo</a>
+                    <a href="hydro_simulation.html" target="_blank" class="demo-btn"> View Live Interactive Demo</a>
                 </div>
             </div>
 
@@ -452,24 +504,44 @@
             </div>
         </section>
 
-        <!-- Publications Section -->
+                <!-- Publications Section -->
         <section id="publications">
-            <h3 class="section-title">Selected Publications</h3>
+            <h3 class="section-title">Publications</h3>
             <ul>
                 <li>
-                    <div class="pub-title">A novel approach to 3D hydrodynamic modeling in shallow water environments</div>
-                    <div class="pub-authors">CPH, Co-Author A, Co-Author B</div>
-                    <div class="pub-journal">Water Resources Research (WRR), 2025.</div>
+                    <div class="pub-title"><a href="https://doi.org/10.1029/2024gl111513" target="_blank">Clustering the diurnal cycle of precipitation using global satellite data</a></div>
+                    <div class="pub-authors"><strong>P Chen</strong>, A Chen, S Yin, Y Li, J Liu</div>
+                    <div class="pub-journal">Geophysical Research Letters 51 (23), e2024GL111513 (2024). DOI: 10.1029/2024gl111513</div>
                 </li>
                 <li>
-                    <div class="pub-title">Impacts of global warming on extreme hydrological events</div>
-                    <div class="pub-authors">CPH, Co-Author C</div>
-                    <div class="pub-journal">Geophysical Research Letters (GRL), 2024.</div>
+                    <div class="pub-title"><a href="https://doi.org/10.1016/j.gloplacha.2025.105094" target="_blank">Regional changes of tropical cyclone rainfall in the western North Pacific</a></div>
+                    <div class="pub-authors">A Chen, Y Li, H Huang, C Azorin-Molina, M Lu, HW Lai, <strong>P Chen</strong>, H Wang, ...</div>
+                    <div class="pub-journal">Global and Planetary Change, 105094 (2025). DOI: 10.1016/j.gloplacha.2025.105094</div>
                 </li>
                 <li>
-                    <div class="pub-title">Advanced Data-driven sediment transport simulation</div>
-                    <div class="pub-authors">Author X, CPH</div>
-                    <div class="pub-journal">Nature Water, 2023.</div>
+                    <div class="pub-title"><a href="https://doi.org/10.1016/j.gloplacha.2024.104582" target="_blank">Impacts of moisture transport on extreme precipitation in the central plains urban agglomeration, China</a></div>
+                    <div class="pub-authors">Y Chen, S Zhang, G Gong, <strong>P Chen</strong>, TY Gan, D Chen, J Liu</div>
+                    <div class="pub-journal">Global and Planetary Change 242, 104582 (2024). DOI: 10.1016/j.gloplacha.2024.104582</div>
+                </li>
+                <li>
+                    <div class="pub-title"><a href="https://doi.org/10.1029/2023ef004292" target="_blank">Anomalous water vapor circulation in an extreme drought event of the mid-reaches of the Lancang-Mekong River basin</a></div>
+                    <div class="pub-authors">G Gong, S Zhang, B Li, Y Chen, <strong>P Chen</strong>, K Wang, TY Gan, D Chen, J Liu</div>
+                    <div class="pub-journal">Earth's Future 12 (8), e2023EF004292 (2024). DOI: 10.1029/2023ef004292</div>
+                </li>
+                <li>
+                    <div class="pub-title"><a href="https://doi.org/10.1029/2023jd039297" target="_blank">Changes in China's snow droughts characteristics from 1993 to 2019</a></div>
+                    <div class="pub-authors">Y Guan, J Liu, D Li, Y Dou, <strong>P Chen</strong>, C Zhang, Y Jiang, H Chen, A Chen, ...</div>
+                    <div class="pub-journal">Journal of Geophysical Research: Atmospheres 129 (2), e2023JD039297 (2024). DOI: 10.1029/2023jd039297</div>
+                </li>
+                <li>
+                    <div class="pub-title"><a href="https://doi.org/10.1016/j.jhydrol.2023.129297" target="_blank">Multi-model analysis of historical runoff changes in the Lancang-Mekong River Basin¨CCharacteristics and uncertainties</a></div>
+                    <div class="pub-authors">Y Li, A Chen, G Mao, <strong>P Chen</strong>, H Huang, H Yang, Z Wang, K Wang, ...</div>
+                    <div class="pub-journal">Journal of Hydrology 619, 129297 (2023). DOI: 10.1016/j.jhydrol.2023.129297</div>
+                </li>
+                <li>
+                    <div class="pub-title"><a href="https://doi.org/10.1029/2023gl104965" target="_blank">Synergistic impact of complex topography and climate variability on the loss of microclimate heterogeneity in Southeast Asia</a></div>
+                    <div class="pub-authors">Y Guan, J Liu, <strong>P Chen</strong>, Y Wang, D Liang, Y Xue, H Chen, Z Liu, P Pellikka</div>
+                    <div class="pub-journal">Geophysical Research Letters 50 (21), e2023GL104965 (2023). DOI: 10.1029/2023gl104965</div>
                 </li>
             </ul>
         </section>
@@ -505,19 +577,26 @@
             <h3 class="section-title">Academic Links</h3>
             <p>Find more about my work and professional profiles below:</p>
             <ul>
-                <li><a href="#" target="_blank">Google Scholar Profile</a></li>
+                <li><a href="https://scholar.google.com/citations?user=woRPJmwAAAAJ&hl=zh-CN" target="_blank">Google Scholar Profile</a></li>
                 <li><a href="#" target="_blank">ResearchGate</a></li>
                 <li><a href="#" target="_blank">GitHub Repository</a></li>
                 <li><a href="#" target="_blank">ORCID</a></li>
             </ul>
         </section>
 
-        </div>
+                </div>
     </div>
-
-    <footer>
-        <p>&copy; 2026 CPH. All rights reserved. | Developed by CPH</p>
-    </footer>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+

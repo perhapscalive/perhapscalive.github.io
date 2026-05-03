@@ -144,9 +144,9 @@
             dirLight.position.set(1, 1, 1).normalize();
             scene.add(dirLight);
 
-            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000000);
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 10, 200000);
             
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, logarithmicDepthBuffer: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             document.getElementById('canvas-container').appendChild(renderer.domElement);
@@ -312,7 +312,10 @@
                     metalness: 0.1,
                     transparent: true,
                     opacity: 0.9, // 较学术实体感，略带透明避免遮挡底部地形
-                    side: THREE.DoubleSide
+                    side: THREE.DoubleSide,
+                    polygonOffset: true,
+                    polygonOffsetFactor: -1,
+                    polygonOffsetUnits: -1
                 });
 
                 waterMesh = new THREE.Mesh(waterGeometry, waterMaterial);
