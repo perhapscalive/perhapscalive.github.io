@@ -1,0 +1,21 @@
+{
+    "about": {
+        "title": "Welcome to my personal homepage.",
+        "description": "This site showcases my research interests and professional skills. I am a recent M.Sc. graduate passionate about hydrological and hydrodynamic simulations, and understanding large-scale climate change impacts on water resources. Currently, I am actively seeking Ph.D. opportunities to further explore my research interests in these areas."
+    },
+    "hydrodynamics": {
+        "description": "After graduating with a master's degree in June 2024, I developed a set of hydrodynamic models from scratch using high-performance C++, including a 1D complex cross-section open-channel network hydrodynamic model, a 2D unstructured mesh hydrodynamic model with CUDA GPU acceleration, and a 1D-2D coupled model. These models have already been applied in several engineering projects."
+    },
+    "hydrology": {
+        "description": "During my master's program, I worked extensively with a global hydrological model developed by my advisor. I studied its source code in depth, conducted various hydrological simulations and analyses using the model, and thus gained a thorough understanding of hydrological model architecture."
+    },
+    "publications": {
+        "description": ""
+    },
+    "toolsDocs": {
+        "description": "Throughout my academic and professional career, I developed a number of automation tools that helped me devote more attention to scientific research questions or enabled faster project execution."
+    },
+    "links": {
+        "description": "Find more about my work and professional profiles below:"
+    }
+}

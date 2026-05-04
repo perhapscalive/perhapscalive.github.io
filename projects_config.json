@@ -1,0 +1,60 @@
+{
+    "hydrodynamics": [
+        {
+            "title": "Interactive 3D Hydrodynamics Visualizer",
+            "link": "hydro_simulation.html",
+            "image": "assets/figs/mh_sim2d.png",
+            "intro": "<p>We developed a web-based, real-time 3D visualization tool for massive unstructured mesh hydrodynamic simulations. It renders dynamic water surface elevations and flow fields directly in the browser.</p><p>The viewer features academic-grade colormaps for depth variation and interactive camera controls, built on top of WebGL and Three.js technologies. This aids in rapid data interpretation for environmental engineering projects.</p>",
+            "btnText": "View Live Interactive Demo"
+        },
+        {
+            "title": "High-Fidelity Coastal Modeling",
+            "link": "#",
+            "image": "assets/figs/mh_sim2d.png",
+            "intro": "<p>Investigating long-term morphological changes and wave-current interactions in complex coastal regions using coupled 3D numerical models.</p><p>This project emphasizes the role of localized turbulence and bed shear stress in sediment transport, validating numerical predictions against large-scale laboratory flume experiments.</p>"
+        },
+        {
+            "title": "Turbulent Flow Structures in Open Channels",
+            "link": "#",
+            "image": "assets/figs/mh_sim2d.png",
+            "intro": "<p>Large Eddy Simulation (LES) of turbulent structures and secondary flows in rough-bed open channels. Our modeling captures the intricate flow field variations over complex riverbeds.</p>"
+        }
+    ],
+    "hydrology": [
+        {
+            "title": "Catchment Modeling and Runoff Predictions",
+            "link": "#",
+            "image": "assets/figs/mh_sim2d.png",
+            "intro": "<p>Developing integrated physics-based models combined with statistical tools to forecast streamflow and assess water availability in ungauged basins.</p>"
+        },
+        {
+            "title": "Climate Change Impacts on Water Cycles",
+            "link": "#",
+            "image": "assets/figs/mh_sim2d.png",
+            "intro": "<p>Evaluating the long-term impacts of climate shifts on extreme hydrological events using statistical downscaling of Global Climate Models (GCMs) and regional hydrological routing.</p>"
+        }
+    ],
+    "toolsDocs": [
+        {
+            "title": "HydroVis-WebGL Toolkit (Open Source Tool)",
+            "link": "hydro_simulation.html",
+            "image": "assets/figs/mh_sim2d.png",
+            "intro": "<p>A lightweight, browser-based visualizer for massive unstructured mesh hydrodynamic outputs. Supports dynamic rendering, interactive temporal playback, and custom academic colormaps without requiring standalone software like Paraview or Tecplot.</p>"
+        },
+        {
+            "title": "Catchment-ML Toolkit (Open Source Tool)",
+            "link": "#",
+            "image": "assets/figs/mh_sim2d.png",
+            "intro": "<p>A Python-based framework tailored for applying various machine learning models (e.g., LSTM, Random Forest) to ungauged basin runoff predictions and streamflow reconstruction across global catchments.</p>"
+        },
+        {
+            "title": "My First Project Documentation (Note/Article)",
+            "link": "docs/example-article.html",
+            "image": "assets/figs/mh_sim2d.png",
+            "intro": "<p>This is an example introduction. You can summarize the core mechanism of your tool, research findings, or methodology here.</p>",
+            "date": "May 2026",
+            "tags": ["Simulation", "Python"],
+            "btnText": "Read Full Text &rarr;"
+        }
+    ]
+}

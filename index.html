@@ -16,7 +16,6 @@
             min-height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
-            display: flex;
         }
         h1, h2, h3, h4, h5, h6 { 
             font-family: "Georgia", "Times New Roman", serif; 
@@ -81,15 +80,15 @@
         /* Main Layout */
         .main-wrapper {
             margin-left: 250px;
-            display: flex;
-            justify-content: center;
             width: calc(100% - 250px);
-            min-min-height: 100vh;
+            min-height: 100vh;
+            display: block;
         }
         .container { 
             max-width: 1100px; 
             width: 100%;
-            padding: 40px 60px; 
+            margin: 0 auto;
+            padding: 0 60px 40px; 
             background: #ffffff; 
             box-shadow: 0 0 20px rgba(0,0,0,0.02);
             min-height: 100vh;
@@ -333,7 +332,7 @@
         }        /* High Resolution Adapatations (1080p, 1440p, 4K) */
         @media (min-width: 1900px) {
             body { font-size: 18px; }
-            .container { max-width: 1300px; padding: 60px 80px; }
+            .container { max-width: 1300px; padding: 0 80px 60px; }
             header { width: 300px; }
             .main-wrapper { margin-left: 300px; width: calc(100% - 300px); }
             .sidebar-brand { padding: 0 50px; }
@@ -342,7 +341,7 @@
         }
         @media (min-width: 2500px) {
             body { font-size: 24px; }
-            .container { max-width: 1800px; padding: 80px 120px; }
+            .container { max-width: 1800px; padding: 0 120px 80px; }
             header { width: 400px; }
             .main-wrapper { margin-left: 400px; width: calc(100% - 400px); }
             .sidebar-brand { padding: 0 60px; }
@@ -351,7 +350,7 @@
         }
         @media (min-width: 3800px) {
             body { font-size: 34px; }
-            .container { max-width: 2800px; padding: 120px 180px; }
+            .container { max-width: 2800px; padding: 0 180px 120px; }
             header { width: 550px; }
             .main-wrapper { margin-left: 550px; width: calc(100% - 550px); }
             .sidebar-brand { padding: 0 80px; margin-bottom: 80px; }
@@ -372,7 +371,7 @@
             <a href="#hydrodynamics">Hydrodynamics</a>
             <a href="#hydrology">Hydrology</a>
             <a href="#publications">Publications</a>
-            <a href="#tools">Tools</a>
+            <a href="#tools-docs">Tools &amp; Tech Notes</a>
             <a href="#links">Links</a>
         </nav>
         <div class="sidebar-footer" style="padding: 0 40px; margin-top: auto; padding-bottom: 30px; font-size: 0.75em; color: #888; text-align: left; line-height: 1.5;">
@@ -385,13 +384,11 @@
             
             <!-- Home Section -->
         <section id="about" class="hero" style="text-align: left; display: flex; flex-direction: column; justify-content: center;">
-            <h1 style="font-size: 2.5em; color: #111; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Penghan CHEN</h1>
+            <h1 style="font-size: 2.5em; color: #111; margin-bottom: 10px; letter-spacing: 1px;">Penghan CHEN</h1>
             <h3 style="font-size: 1.2em; color: #555; font-weight: normal; margin-top: 0; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px; display: inline-block;">Prospective Ph.D. Student / Recent M.Sc. Graduate</h3>
             
             <p style="font-size: 1.05em; color: #444; max-width: 100%; margin: 0 0 15px 0; line-height: 1.8; ">
-                Welcome to my personal homepage. This site showcases my research interests and professional skills.
-
-I am a recent M.Sc. graduate passionate about hydrological and hydrodynamic simulations, and understanding large-scale climate change impacts on water resources. Currently, I am actively seeking Ph.D. opportunities to further explore my research interests in these areas.
+                <span id="about-text-container"></span>
 
             <div class="skills-container" id="skills-container">
                 <div class="skills-column" id="research-interests-col">
@@ -434,79 +431,21 @@ I am a recent M.Sc. graduate passionate about hydrological and hydrodynamic simu
 <!-- Hydrodynamics Section -->
         <section id="hydrodynamics">
             <h3 class="section-title">Hydrodynamics</h3>
-            <p>
-                My hydrodynamics research involves high-fidelity 3D modeling of open channel flows, coastal dynamics, and localized turbulent structures. 
-            </p>
-            
-            <div class="project-card">
-                <img src="assets/figs/mh_sim2d.png" alt="High-Resolution Hydrodynamics Simulation">
-                <div class="project-info">
-                    <h4><a href="hydro_simulation.html" target="_blank">Interactive 3D Hydrodynamics Visualizer</a></h4>
-                    <p>
-                        We developed a web-based, real-time 3D visualization tool for massive unstructured mesh hydrodynamic simulations. It renders dynamic water surface elevations and flow fields directly in the browser. 
-                    </p>
-                    <p>
-                        The viewer features academic-grade colormaps for depth variation and interactive camera controls, built on top of WebGL and Three.js technologies. This aids in rapid data interpretation for environmental engineering projects.
-                    </p>
-                    <a href="hydro_simulation.html" target="_blank" class="demo-btn"> View Live Interactive Demo</a>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <img src="assets/figs/mh_sim2d.png" alt="High-Fidelity Coastal Modeling">
-                <div class="project-info">
-                    <h4><a href="#" target="_blank">High-Fidelity Coastal Modeling</a></h4>
-                    <p>
-                        Investigating long-term morphological changes and wave-current interactions in complex coastal regions using coupled 3D numerical models. 
-                    </p>
-                    <p>
-                        This project emphasizes the role of localized turbulence and bed shear stress in sediment transport, validating numerical predictions against large-scale laboratory flume experiments.
-                    </p>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <img src="assets/figs/mh_sim2d.png" alt="Turbulent Flow Structures">
-                <div class="project-info">
-                    <h4><a href="#" target="_blank">Turbulent Flow Structures in Open Channels</a></h4>
-                    <p>
-                        Large Eddy Simulation (LES) of turbulent structures and secondary flows in rough-bed open channels. Our modeling captures the intricate flow field variations over complex riverbeds.
-                    </p>
-                </div>
-            </div>
+            <p id="hydrodynamics-intro-text"></p>
+            <div id="hydrodynamics-list"></div>
         </section>
 
         <!-- Hydrology Section -->
         <section id="hydrology">
             <h3 class="section-title">Hydrology</h3>
-            <p>
-                In the field of hydrology, my focus lies in understanding catchment-scale water balances, extreme event forecasting (floods and droughts), and the impact of anthropogenic activities on regional water resources.
-            </p>
-            
-            <div class="project-card">
-                <img src="assets/figs/mh_sim2d.png" alt="Catchment Modeling">
-                <div class="project-info">
-                    <h4><a href="#" target="_blank">Catchment Modeling and Runoff Predictions</a></h4>
-                    <p>
-                        Developing integrated physics-based models combined with statistical tools to forecast streamflow and assess water availability in ungauged basins. 
-                    </p>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <img src="assets/figs/mh_sim2d.png" alt="Climate Change Impacts">
-                <div class="project-info">
-                    <h4><a href="#" target="_blank">Climate Change Impacts on Water Cycles</a></h4>
-                    <p>
-                        Evaluating the long-term impacts of climate shifts on extreme hydrological events using statistical downscaling of Global Climate Models (GCMs) and regional hydrological routing.
-                    </p>
-                </div>
-            </div>
+            <p id="hydrology-intro-text"></p>
+            <div id="hydrology-list"></div>
         </section>
 
                 <!-- Publications Section -->
         <section id="publications">
             <h3 class="section-title">Publications</h3>
+            <p id="publications-intro-text" style="color: #555;"></p>
             <ul>
                 <li>
                     <div class="pub-title"><a href="https://doi.org/10.1029/2024gl111513" target="_blank">Clustering the diurnal cycle of precipitation using global satellite data</a></div>
@@ -546,49 +485,103 @@ I am a recent M.Sc. graduate passionate about hydrological and hydrodynamic simu
             </ul>
         </section>
 
-        <!-- Tools Section -->
-        <section id="tools">
-            <h3 class="section-title">Tools & Datasets</h3>
-            <p>Committed to open science, I actively develop and maintain several open-source tools for the environmental engineering community.</p>
-            
-            <div class="project-card">
-                <img src="assets/figs/mh_sim2d.png" alt="HydroVis-WebGL">
-                <div class="project-info">
-                    <h4><a href="hydro_simulation.html" target="_blank">HydroVis-WebGL Toolkit</a></h4>
-                    <p>
-                        A lightweight, browser-based visualizer for massive unstructured mesh hydrodynamic outputs. Supports dynamic rendering, interactive temporal playback, and custom academic colormaps without requiring standalone software like Paraview or Tecplot.
-                    </p>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <img src="assets/figs/mh_sim2d.png" alt="Catchment-ML Toolkit">
-                <div class="project-info">
-                    <h4><a href="#" target="_blank">Catchment-ML Toolkit</a></h4>
-                    <p>
-                        A Python-based framework tailored for applying various machine learning models (e.g., LSTM, Random Forest) to ungauged basin runoff predictions and streamflow reconstruction across global catchments.
-                    </p>
-                </div>
-            </div>
+        <!-- Documents/Notes Section -->
+        <section id="tools-docs">
+            <h3 class="section-title">Tools &amp; Tech Notes</h3>
+            <p id="toolsDocs-intro-text"></p>
+            <div id="tools-docs-list"></div>
         </section>
+
+        <!-- Script to load all project sections simultaneously -->
+        <script>
+            fetch('projects_config.json')
+                .then(response => response.json())
+                .then(data => {
+                    const renderSection = (items, containerId) => {
+                        const container = document.getElementById(containerId);
+                        if (!container) return;
+                        
+                        let htmlStr = '';
+                        items.forEach(doc => {
+                            let metaHtml = '';
+                            if (doc.date || doc.tags) {
+                                const dateStr = doc.date ? doc.date : '';
+                                const tagsStr = doc.tags ? "Tags: " + doc.tags.join(", ") : '';
+                                metaHtml = `<p style="font-size: 0.85em; color: #888; margin-top: -10px; margin-bottom: 15px;">${dateStr} &nbsp;|&nbsp; ${tagsStr}</p>`;
+                            }
+                            
+                            let btnHtml = '';
+                            if (doc.link && doc.link !== "#") {
+                                const btnStr = doc.btnText || "View Detail";
+                                btnHtml = `<a href="${doc.link}" target="${doc.link.startsWith('#') ? '_self' : '_blank'}" class="btn" style="margin-top: 10px;">${btnStr}</a>`;
+                            }
+                            
+                            htmlStr += `
+                            <div class="project-card">
+                                <img src="${doc.image}" alt="${doc.title}">
+                                <div class="project-info">
+                                    <h4><a href="${doc.link}" target="${doc.link.startsWith('#') ? '_self' : '_blank'}">${doc.title}</a></h4>
+                                    ${metaHtml}
+                                    ${doc.intro}
+                                    ${btnHtml}
+                                </div>
+                            </div>
+                            `;
+                        });
+                        container.innerHTML = htmlStr;
+                    };
+
+                    renderSection(data.hydrodynamics, 'hydrodynamics-list');
+                    renderSection(data.hydrology, 'hydrology-list');
+                    renderSection(data.toolsDocs, 'tools-docs-list');
+                })
+                .catch(err => console.error('Error loading projects_config:', err));
+        </script>
 
         <!-- Links Section -->
         <section id="links">
             <h3 class="section-title">Academic Links</h3>
-            <p>Find more about my work and professional profiles below:</p>
+            <p id="links-intro-text"></p>
             <ul>
                 <li><a href="https://scholar.google.com/citations?user=woRPJmwAAAAJ&hl=zh-CN" target="_blank">Google Scholar Profile</a></li>
-                <li><a href="#" target="_blank">ResearchGate</a></li>
-                <li><a href="#" target="_blank">GitHub Repository</a></li>
-                <li><a href="#" target="_blank">ORCID</a></li>
+                <li><a href="https://www.researchgate.net/profile/Penghan-Chen" target="_blank">ResearchGate</a></li>
+                <!-- <li><a href="#" target="_blank">GitHub Repository</a></li> -->
+                <!-- <li><a href="#" target="_blank">ORCID</a></li> -->
             </ul>
         </section>
 
                 </div>
     </div>
 
+
+        <!-- Load Section Intros -->
+        <script>
+            fetch('sections_config.json')
+                .then(response => response.json())
+                .then(data => {
+                    if(data.about) document.getElementById('about-text-container').innerHTML = data.about.title + ' ' + data.about.description;
+                    if(data.hydrodynamics) document.getElementById('hydrodynamics-intro-text').innerHTML = data.hydrodynamics.description;
+                    if(data.hydrology) document.getElementById('hydrology-intro-text').innerHTML = data.hydrology.description;
+                    if(data.publications) document.getElementById('publications-intro-text').innerHTML = data.publications.description;
+                    if(data.toolsDocs) document.getElementById('toolsDocs-intro-text').innerHTML = data.toolsDocs.description;
+                    if(data.links) document.getElementById('links-intro-text').innerHTML = data.links.description;
+                })
+                .catch(err => console.error('Error loading sections_config:', err));
+        </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
