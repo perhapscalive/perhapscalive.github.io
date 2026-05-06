@@ -4,13 +4,13 @@
     { "name": "Precipitation", "score": 100 },
     { "name": "Rainfall-Runoff Simulation", "score": 90 },
     { "name": "Machine Learning in Hydrology", "score": 80 },
-    { "name": "Earth System & Sustainability", "score": 70 },
-    { "name": "Ecological Hydrology & Carbon Cycling", "score": 60 },
-    { "name": "Atmospheric Science & Tropical Cyclones", "score": 60 },
-    { "name": "Water and Energy", "score": 60 }
+    { "name": "Earth System & Sustainability", "score": 75 },
+    { "name": "Ecological Hydrology & Carbon Cycling", "score": 70 },
+    { "name": "Atmospheric Science", "score": 70 },
+    { "name": "Tropical Cyclones / Storm Surges", "score": 70 }
   ],
   "technicalSkills": [
-    { "name": "Hydrodynamics Numerical Modeling", "score": 100 },
+    { "name": "Hydrodynamics Numerical Modeling (Shallow Water Equations)", "score": 100 },
     { "name": "Hydrological Modeling", "score": 90 },
     { "name": "Scientific Computing on Linux", "score": 90 },
     { "name": "Programming (C++, Python)", "score": 90 },

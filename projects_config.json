@@ -1,15 +1,15 @@
 {
     "hydrodynamics": [
         {
-            "title": "Interactive 3D Hydrodynamics Visualizer",
+            "title": "One Dimensional Complex Cross-Section Open-Channel Network Hydrodynamic Model",
             "link": "hydro_simulation.html",
             "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>We developed a web-based, real-time 3D visualization tool for massive unstructured mesh hydrodynamic simulations. It renders dynamic water surface elevations and flow fields directly in the browser.</p><p>The viewer features academic-grade colormaps for depth variation and interactive camera controls, built on top of WebGL and Three.js technologies. This aids in rapid data interpretation for environmental engineering projects.</p>",
-            "btnText": "View Live Interactive Demo"
+            "intro": "<p>基于圣维南方程组（一维浅水方程）的明渠水动力模型，采用Godunov型有限体积法，界面通量计算采用HLL近似黎曼求解器，支持复杂断面几何、支持通过汊点连接河网、支持多种内外边界条件。模型使用C++开发，具有良好的跨平台特性。模型采用面向对象的设计，便于扩展和维护，对于核心计算部分采用OpenMP进行并行加速。</p>",
+            "btnText": "View Details (Chinese for now)"
         },
         {
-            "title": "High-Fidelity Coastal Modeling",
-            "link": "#",
+            "title": "Two Dimensional Unstructured Mesh Hydrodynamic Model with CUDA GPU Acceleration",
+            "link": "hydro_simulation.html",
             "image": "assets/figs/mh_sim2d.png",
             "intro": "<p>Investigating long-term morphological changes and wave-current interactions in complex coastal regions using coupled 3D numerical models.</p><p>This project emphasizes the role of localized turbulence and bed shear stress in sediment transport, validating numerical predictions against large-scale laboratory flume experiments.</p>"
         },
@@ -42,10 +42,16 @@
             "intro": "<p>A lightweight, browser-based visualizer for massive unstructured mesh hydrodynamic outputs. Supports dynamic rendering, interactive temporal playback, and custom academic colormaps without requiring standalone software like Paraview or Tecplot.</p>"
         },
         {
-            "title": "Catchment-ML Toolkit (Open Source Tool)",
-            "link": "#",
+            "title": "My First Project Documentation (Note/Article)",
+            "link": "docs/example-article.html",
             "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>A Python-based framework tailored for applying various machine learning models (e.g., LSTM, Random Forest) to ungauged basin runoff predictions and streamflow reconstruction across global catchments.</p>"
+            "intro": "<p>This is an example introduction. You can summarize the core mechanism of your tool, research findings, or methodology here.</p>",
+            "date": "May 2026",
+            "tags": [
+                "Simulation",
+                "Python"
+            ],
+            "btnText": "View Details"
         },
         {
             "title": "My First Project Documentation (Note/Article)",
@@ -53,7 +59,10 @@
             "image": "assets/figs/mh_sim2d.png",
             "intro": "<p>This is an example introduction. You can summarize the core mechanism of your tool, research findings, or methodology here.</p>",
             "date": "May 2026",
-            "tags": ["Simulation", "Python"],
+            "tags": [
+                "Simulation",
+                "Python"
+            ],
             "btnText": "Read Full Text &rarr;"
         }
     ]
