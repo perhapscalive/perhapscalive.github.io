@@ -1,0 +1,1 @@
+After graduating with a master's degree in June 2024, I developed a set of hydrodynamic models from scratch using high-performance C++, including a 1D complex cross-section open-channel network hydrodynamic model, a 2D unstructured mesh hydrodynamic model with CUDA GPU acceleration, and a 1D-2D coupled model. These models have already been applied in several engineering projects.

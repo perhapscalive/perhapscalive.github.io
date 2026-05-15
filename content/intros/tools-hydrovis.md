@@ -1,0 +1,1 @@
+A lightweight, browser-based visualizer for massive unstructured mesh hydrodynamic outputs. Supports dynamic rendering, interactive temporal playback, and custom academic colormaps without requiring standalone software like Paraview or Tecplot.

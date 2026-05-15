@@ -1,0 +1,1 @@
+Welcome to my personal homepage. This site showcases my research interests and professional skills.I am a recent M.Sc. graduate passionate about hydrological and hydrodynamic simulations, and understanding large-scale climate change impacts on water resources. Currently, I am actively seeking Ph.D. opportunities to further explore my research interests in these areas.

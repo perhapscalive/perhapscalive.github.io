@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>P.CHEN's PAGE</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* Academic, Clean, Top-Tier Journal Style */
         body { 
@@ -96,7 +97,8 @@
         }
         
         section { 
-            padding: 80px 0 40px; 
+            padding: 30px 0 40px; 
+            margin-top: 50px;
             border-bottom: 1px solid #f0f0f0; 
         }
         section:last-child { 
@@ -105,8 +107,8 @@
         
         /* Section specific styles */
         .hero { 
-            padding: 0;
-            min-height: 100vh;
+            padding: 60px 0 40px;
+            min-height: 60vh;
             display: flex; 
             flex-direction: column; 
             justify-content: center;
@@ -123,10 +125,10 @@
             margin-top: 0; 
         }
         .hero p { 
-            font-size: 1.1em; 
+            font-size: 1em; 
             color: #555; 
-            max-width: 700px;
-            margin: 20px auto;
+            max-width: 100%;
+            margin: 0 0 15px 0;
         }
         
         .section-title {
@@ -262,6 +264,7 @@
         /* Smooth Scrolling */
         html { scroll-behavior: smooth; }
 
+
         /* Skills & Interests Chart */
         .skills-container {
             display: flex;
@@ -298,37 +301,39 @@
         }
         .progress-fill {
             height: 100%;
-            background: linear-gradient(270deg, #004578, #0078d4, #00a4ef, #0078d4);
-            background-size: 300% 100%;
+            background: linear-gradient(90deg, #003d6b 0%, #0069b4 55%, #1a8fe0 100%);
             border-radius: 4px;
             position: relative;
             overflow: hidden;
-            transition: width 1.5s ease-in-out;
+            transition: width 1.5s ease-in-out, box-shadow 0.4s ease;
         }
         .skill-bar {
             margin-bottom: 15px;
             cursor: default;
         }
         .skill-bar:hover .progress-fill {
-            animation: water-drift 3s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(0, 105, 180, 0.35), 0 0 2px rgba(0, 105, 180, 0.2);
         }
         .skill-bar:hover .progress-fill::after {
             content: '';
             position: absolute;
-            top: -2px; left: 0; right: 0; bottom: 0;
-            /* Advanced SVG water wave */
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><path d="M 0,10 C 25,0 25,20 50,10 C 75,0 75,20 100,10 L 100,20 L 0,20 Z" fill="rgba(255, 255, 255, 0.4)"/></svg>') repeat-x;
-            background-size: 30px 150%;
-            animation: wave-ripple 1.5s linear infinite;
+            top: 0;
+            left: -70%;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.22) 40%,
+                rgba(255, 255, 255, 0.36) 50%,
+                rgba(255, 255, 255, 0.22) 60%,
+                transparent 100%
+            );
+            animation: sheen-sweep 1.8s cubic-bezier(0.4, 0, 0.55, 1) infinite;
         }
-        @keyframes water-drift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes wave-ripple {
-            from { background-position: 0 0; }
-            to { background-position: -30px 0; }
+        @keyframes sheen-sweep {
+            from { left: -70%; }
+            to   { left: 120%; }
         }        /* High Resolution Adapatations (1080p, 1440p, 4K) */
         @media (min-width: 1900px) {
             body { font-size: 18px; }
@@ -385,10 +390,9 @@
             <!-- Home Section -->
         <section id="about" class="hero" style="text-align: left; display: flex; flex-direction: column; justify-content: center;">
             <h1 style="font-size: 2.5em; color: #111; margin-bottom: 10px; letter-spacing: 1px;">Penghan CHEN</h1>
-            <h3 style="font-size: 1.2em; color: #555; font-weight: normal; margin-top: 0; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px; display: inline-block;">Prospective Ph.D. Student / Recent M.Sc. Graduate</h3>
+            <h3 style="font-size: 1.2em; color: #555; font-weight: normal; margin-top: 0; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px; display: inline-block;">Prospective Ph.D. Student</h3>
             
-            <p style="font-size: 1.05em; color: #444; max-width: 100%; margin: 0 0 15px 0; line-height: 1.8; ">
-                <span id="about-text-container"></span>
+            <div id="about-text-container" style="font-size: 1em; color: #444; max-width: 100%; margin: 0 0 15px 0; line-height: 1.8;"></div>
 
             <div class="skills-container" id="skills-container">
                 <div class="skills-column" id="research-interests-col">
@@ -494,48 +498,56 @@
 
         <!-- Script to load all project sections simultaneously -->
         <script>
-            fetch('projects_config.json')
-                .then(response => response.json())
-                .then(data => {
-                    const renderSection = (items, containerId) => {
-                        const container = document.getElementById(containerId);
-                        if (!container) return;
-                        
-                        let htmlStr = '';
-                        items.forEach(doc => {
-                            let metaHtml = '';
-                            if (doc.date || doc.tags) {
-                                const dateStr = doc.date ? doc.date : '';
-                                const tagsStr = doc.tags ? "Tags: " + doc.tags.join(", ") : '';
-                                metaHtml = `<p style="font-size: 0.85em; color: #888; margin-top: -10px; margin-bottom: 15px;">${dateStr} &nbsp;|&nbsp; ${tagsStr}</p>`;
-                            }
-                            
-                            let btnHtml = '';
-                            if (doc.link && doc.link !== "#") {
-                                const btnStr = doc.btnText || "View Detail";
-                                btnHtml = `<a href="${doc.link}" target="${doc.link.startsWith('#') ? '_self' : '_blank'}" class="btn" style="margin-top: 10px;">${btnStr}</a>`;
-                            }
-                            
-                            htmlStr += `
-                            <div class="project-card">
-                                <img src="${doc.image}" alt="${doc.title}">
-                                <div class="project-info">
-                                    <h4><a href="${doc.link}" target="${doc.link.startsWith('#') ? '_self' : '_blank'}">${doc.title}</a></h4>
-                                    ${metaHtml}
-                                    ${doc.intro}
-                                    ${btnHtml}
-                                </div>
-                            </div>
-                            `;
-                        });
-                        container.innerHTML = htmlStr;
-                    };
+            (async function() {
+                const renderSection = async (items, containerId) => {
+                    const container = document.getElementById(containerId);
+                    if (!container) return;
 
-                    renderSection(data.hydrodynamics, 'hydrodynamics-list');
-                    renderSection(data.hydrology, 'hydrology-list');
-                    renderSection(data.toolsDocs, 'tools-docs-list');
-                })
-                .catch(err => console.error('Error loading projects_config:', err));
+                    // Fetch all intro MD files in parallel
+                    const intros = await Promise.all(items.map(async doc => {
+                        if (doc.introFile) {
+                            try {
+                                const r = await fetch(doc.introFile);
+                                return marked.parse(await r.text());
+                            } catch(e) { return ''; }
+                        }
+                        return doc.intro || '';
+                    }));
+
+                    let htmlStr = '';
+                    items.forEach((doc, i) => {
+                        let metaHtml = '';
+                        if (doc.date || doc.tags) {
+                            const dateStr = doc.date || '';
+                            const tagsStr = doc.tags ? 'Tags: ' + doc.tags.join(', ') : '';
+                            metaHtml = `<p style="font-size: 0.85em; color: #888; margin-top: -10px; margin-bottom: 15px;">${dateStr} &nbsp;|&nbsp; ${tagsStr}</p>`;
+                        }
+                        let btnHtml = '';
+                        if (doc.link && doc.link !== '#') {
+                            const target = doc.link.startsWith('#') ? '_self' : '_blank';
+                            btnHtml = `<a href="${doc.link}" target="${target}" class="btn" style="margin-top: 10px;">${doc.btnText || 'View Detail'}</a>`;
+                        }
+                        htmlStr += `
+                        <div class="project-card">
+                            <img src="${doc.image}" alt="${doc.title}">
+                            <div class="project-info">
+                                <h4><a href="${doc.link}" target="${doc.link.startsWith('#') ? '_self' : '_blank'}">${doc.title}</a></h4>
+                                ${metaHtml}${intros[i]}${btnHtml}
+                            </div>
+                        </div>`;
+                    });
+                    container.innerHTML = htmlStr;
+                };
+
+                try {
+                    const data = await fetch('projects_config.json').then(r => r.json());
+                    await Promise.all([
+                        renderSection(data.hydrodynamics || [], 'hydrodynamics-list'),
+                        renderSection(data.hydrology    || [], 'hydrology-list'),
+                        renderSection(data.toolsDocs    || [], 'tools-docs-list'),
+                    ]);
+                } catch(err) { console.error('Error loading projects_config:', err); }
+            })();
         </script>
 
         <!-- Links Section -->
@@ -556,17 +568,28 @@
 
         <!-- Load Section Intros -->
         <script>
-            fetch('sections_config.json')
-                .then(response => response.json())
-                .then(data => {
-                    if(data.about) document.getElementById('about-text-container').innerHTML = data.about.title + ' ' + data.about.description;
-                    if(data.hydrodynamics) document.getElementById('hydrodynamics-intro-text').innerHTML = data.hydrodynamics.description;
-                    if(data.hydrology) document.getElementById('hydrology-intro-text').innerHTML = data.hydrology.description;
-                    if(data.publications) document.getElementById('publications-intro-text').innerHTML = data.publications.description;
-                    if(data.toolsDocs) document.getElementById('toolsDocs-intro-text').innerHTML = data.toolsDocs.description;
-                    if(data.links) document.getElementById('links-intro-text').innerHTML = data.links.description;
-                })
-                .catch(err => console.error('Error loading sections_config:', err));
+            (async function() {
+                const loadMd = async (file, id) => {
+                    try {
+                        const r = await fetch(file);
+                        const md = await r.text();
+                        const el = document.getElementById(id);
+                        if (el) el.innerHTML = marked.parse(md);
+                    } catch(e) { console.warn('Could not load', file, e); }
+                };
+                try {
+                    const data = await fetch('sections_config.json').then(r => r.json());
+                    const tasks = [
+                        data.about?.descFile        && loadMd(data.about.descFile,          'about-text-container'),
+                        data.hydrodynamics?.descFile && loadMd(data.hydrodynamics.descFile,   'hydrodynamics-intro-text'),
+                        data.hydrology?.descFile     && loadMd(data.hydrology.descFile,        'hydrology-intro-text'),
+                        data.publications?.descFile  && loadMd(data.publications.descFile,     'publications-intro-text'),
+                        data.toolsDocs?.descFile     && loadMd(data.toolsDocs.descFile,        'toolsDocs-intro-text'),
+                        data.links?.descFile         && loadMd(data.links.descFile,            'links-intro-text'),
+                    ].filter(Boolean);
+                    await Promise.all(tasks);
+                } catch(err) { console.error('Error loading sections_config:', err); }
+            })();
         </script>
 </body>
 </html>

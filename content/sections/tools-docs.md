@@ -1,0 +1,1 @@
+Throughout my academic and professional career, I developed a number of automation tools that helped me devote more attention to scientific research questions or enabled faster project execution. This section also includes detailed technical notes on mathematical/physical derivations and methodological formulations.

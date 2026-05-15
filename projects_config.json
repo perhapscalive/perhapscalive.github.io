@@ -4,20 +4,21 @@
             "title": "One Dimensional Complex Cross-Section Open-Channel Network Hydrodynamic Model",
             "link": "hydro_simulation.html",
             "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>基于圣维南方程组（一维浅水方程）的明渠水动力模型，采用Godunov型有限体积法，界面通量计算采用HLL近似黎曼求解器，支持复杂断面几何、支持通过汊点连接河网、支持多种内外边界条件。模型使用C++开发，具有良好的跨平台特性。模型采用面向对象的设计，便于扩展和维护，对于核心计算部分采用OpenMP进行并行加速。</p>",
-            "btnText": "View Details (Chinese for now)"
+            "introFile": "content/intros/hdyn-1d-model.md",
+            "btnText": "View Details"
         },
         {
             "title": "Two Dimensional Unstructured Mesh Hydrodynamic Model with CUDA GPU Acceleration",
             "link": "hydro_simulation.html",
             "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>Investigating long-term morphological changes and wave-current interactions in complex coastal regions using coupled 3D numerical models.</p><p>This project emphasizes the role of localized turbulence and bed shear stress in sediment transport, validating numerical predictions against large-scale laboratory flume experiments.</p>"
+            "introFile": "content/intros/hdyn-2d-model.md",
+            "btnText": "View Details"
         },
         {
-            "title": "Turbulent Flow Structures in Open Channels",
+            "title": "One-Two Dimensional Coupling Hydrodynamic Model for Complex River Networks",
             "link": "#",
             "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>Large Eddy Simulation (LES) of turbulent structures and secondary flows in rough-bed open channels. Our modeling captures the intricate flow field variations over complex riverbeds.</p>"
+            "introFile": "content/intros/hdyn-coupling-model.md"
         }
     ],
     "hydrology": [
@@ -25,45 +26,31 @@
             "title": "Catchment Modeling and Runoff Predictions",
             "link": "#",
             "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>Developing integrated physics-based models combined with statistical tools to forecast streamflow and assess water availability in ungauged basins.</p>"
+            "introFile": "content/intros/hyd-catchment.md"
         },
         {
             "title": "Climate Change Impacts on Water Cycles",
             "link": "#",
             "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>Evaluating the long-term impacts of climate shifts on extreme hydrological events using statistical downscaling of Global Climate Models (GCMs) and regional hydrological routing.</p>"
+            "introFile": "content/intros/hyd-climate.md"
         }
     ],
     "toolsDocs": [
         {
-            "title": "HydroVis-WebGL Toolkit (Open Source Tool)",
+            "title": "HydroVis-WebGL Toolkit",
             "link": "hydro_simulation.html",
             "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>A lightweight, browser-based visualizer for massive unstructured mesh hydrodynamic outputs. Supports dynamic rendering, interactive temporal playback, and custom academic colormaps without requiring standalone software like Paraview or Tecplot.</p>"
+            "introFile": "content/intros/tools-hydrovis.md",
+            "btnText": "Open Visualizer"
         },
         {
-            "title": "My First Project Documentation (Note/Article)",
-            "link": "docs/example-article.html",
+            "title": "Example Article / Tech Note",
+            "link": "reader.html?file=docs/example-article.md",
             "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>This is an example introduction. You can summarize the core mechanism of your tool, research findings, or methodology here.</p>",
+            "introFile": "content/intros/tools-example.md",
             "date": "May 2026",
-            "tags": [
-                "Simulation",
-                "Python"
-            ],
-            "btnText": "View Details"
-        },
-        {
-            "title": "My First Project Documentation (Note/Article)",
-            "link": "docs/example-article.html",
-            "image": "assets/figs/mh_sim2d.png",
-            "intro": "<p>This is an example introduction. You can summarize the core mechanism of your tool, research findings, or methodology here.</p>",
-            "date": "May 2026",
-            "tags": [
-                "Simulation",
-                "Python"
-            ],
-            "btnText": "Read Full Text &rarr;"
+            "tags": ["Simulation", "Python"],
+            "btnText": "Read Full Text →"
         }
     ]
 }

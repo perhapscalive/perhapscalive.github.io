@@ -1,0 +1,1 @@
+A 2D finite volume hydrodynamic model on unstructured triangular/quad meshes, solving the shallow water equations with a CUDA-accelerated GPU backend for high-performance simulation of large-scale flooding and estuarine dynamics.

@@ -1,0 +1,1 @@
+During my master's program, I worked extensively with a global hydrological model developed by my advisor. I studied its source code in depth, conducted various hydrological simulations and analyses using the model, and thus gained a thorough understanding of hydrological model architecture.
