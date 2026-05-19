@@ -3,16 +3,16 @@
         {
             "title": "One Dimensional Complex Cross-Section Open-Channel Network Hydrodynamic Model",
             "link": "hydro_simulation.html",
-            "image": "assets/figs/mh_sim2d.png",
+            "image": "assets/figs/1d.png",
             "introFile": "content/intros/hdyn-1d-model.md",
-            "btnText": "View Details"
+            "btnText": "View Details (Not prepared yet)"
         },
         {
             "title": "Two Dimensional Unstructured Mesh Hydrodynamic Model with CUDA GPU Acceleration",
             "link": "hydro_simulation.html",
             "image": "assets/figs/mh_sim2d.png",
             "introFile": "content/intros/hdyn-2d-model.md",
-            "btnText": "View Details"
+            "btnText": "Visualization of Hydrodynamic Simulation "
         },
         {
             "title": "One-Two Dimensional Coupling Hydrodynamic Model for Complex River Networks",
@@ -22,27 +22,9 @@
         }
     ],
     "hydrology": [
-        {
-            "title": "Catchment Modeling and Runoff Predictions",
-            "link": "#",
-            "image": "assets/figs/mh_sim2d.png",
-            "introFile": "content/intros/hyd-catchment.md"
-        },
-        {
-            "title": "Climate Change Impacts on Water Cycles",
-            "link": "#",
-            "image": "assets/figs/mh_sim2d.png",
-            "introFile": "content/intros/hyd-climate.md"
-        }
+
     ],
     "toolsDocs": [
-        {
-            "title": "HydroVis-WebGL Toolkit",
-            "link": "hydro_simulation.html",
-            "image": "assets/figs/mh_sim2d.png",
-            "introFile": "content/intros/tools-hydrovis.md",
-            "btnText": "Open Visualizer"
-        },
         {
             "title": "Example Article / Tech Note",
             "link": "reader.html?file=docs/example-article.md",

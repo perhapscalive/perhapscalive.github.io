@@ -1,3 +1,1 @@
-基于圣维南方程组（一维浅水方程）的明渠水动力模型，采用 Godunov 型有限体积法，界面通量计算采用 HLL 近似黎曼求解器，支持复杂断面几何、支持通过汊点连接河网、支持多种内外边界条件。
-
-模型使用 C++ 开发，具有良好的跨平台特性。采用面向对象的设计，便于扩展和维护，对于核心计算部分采用 OpenMP 进行并行加速。
+A open-channel hydraulics model based on the Saint-Venant equations, using a Godunov-type finite volume method, with HLL approximate Riemann solver for interface flux calculation, supporting complex cross-sectional geometry, connecting river network via confluence points, and handling various internal and external boundary conditions. 
